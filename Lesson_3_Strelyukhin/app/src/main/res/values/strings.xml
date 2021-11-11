@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Lesson_3_Strelyukhin</string>
+    <string name="card_text">Карта №7898769\nСпециалист</string>
+    <string name="menu_edit_label">Edit</string>
+    <string name="profile_data_title">Личные данные</string>
+    <string name="exit_button_label">Выйти из аккаунта</string>
+    <string name="constraint_activity_label">Constraint activity</string>
+    <string name="toolbar_title">Личный профиль</string>
+    <string name="title_name">Имя</string>
+    <string name="label_name">Анастасия</string>
+    <string name="title_surname">Фамилия</string>
+    <string name="label_surname">Антонина</string>
+    <string name="title_email">E-mail</string>
+    <string name="label_email">any.box@gmail.ru</string>
+    <string name="title_login">Логин</string>
+    <string name="label_login">IE023UOI88</string>
+    <string name="title_region">Ваш регион</string>
+    <string name="label_region">Санкт-Петербург</string>
+    <string name="linear_activity_label">Linear activity</string>
+</resources>
