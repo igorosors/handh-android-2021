@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textViewDataTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/profile_data_title"
+        android:textColor="@color/orange"
+        android:textSize="14sp"
+        app:fontFamily="@font/roboto_medium" />
+
+    <TextView
+        android:id="@+id/titleName"
+        style="@style/Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/title_name" />
+
+    <TextView
+        android:id="@+id/labelName"
+        style="@style/MainText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="2dp"
+        android:text="@string/label_name" />
+
+    <TextView
+        android:id="@+id/titleSurname"
+        style="@style/Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="26dp"
+        android:text="@string/title_surname" />
+
+    <TextView
+        android:id="@+id/labelSurname"
+        style="@style/MainText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="2dp"
+        android:text="@string/label_surname" />
+
+    <TextView
+        android:id="@+id/titleEmail"
+        style="@style/Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="26dp"
+        android:text="@string/title_email" />
+
+    <TextView
+        android:id="@+id/labelEmail"
+        style="@style/MainText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="2dp"
+        android:text="@string/label_email" />
+
+    <TextView
+        android:id="@+id/titleLogin"
+        style="@style/Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="26dp"
+        android:text="@string/title_login" />
+
+    <TextView
+        android:id="@+id/labelLogin"
+        style="@style/MainText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="2dp"
+        android:text="@string/label_login" />
+
+    <RelativeLayout
+        android:id="@+id/relativeRegion"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:layout_marginTop="9dp">
+
+        <TextView
+            android:id="@+id/titleRegion"
+            style="@style/Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="17dp"
+            android:layout_toLeftOf="@+id/imageViewEdit"
+            android:text="@string/title_region" />
+
+        <TextView
+            android:id="@+id/labelRegion"
+            style="@style/MainText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/titleRegion"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="2dp"
+            android:layout_toLeftOf="@+id/imageViewEdit"
+            android:text="@string/label_region" />
+
+        <ImageView
+            android:id="@+id/imageViewEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="12dp"
+            android:background="?selectableItemBackgroundBorderless"
+            android:padding="4dp"
+            app:srcCompat="@drawable/ic_edit" />
+
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/textViewExit"
+        style="@style/MainText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:background="?selectableItemBackground"
+        android:drawablePadding="32dp"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="12dp"
+        android:text="@string/exit_button_label"
+        app:drawableStartCompat="@drawable/ic_exit" />
+
+
+</LinearLayout>
