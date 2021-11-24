@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Lesson_6_Strelyukhin</string>
+    <string name="data_hint">35</string>
+    <string name="text_alert">Необходимо подать показания до 25.03.18</string>
+    <string name="text_no_alert">Показания сданы 16.02.18 и будут учтены при следующем расчете 25.02.18</string>
+    <string name="toolbar_title_1">Item one</string>
+    <string name="toolbar_title_2">Item two</string>
+    <string name="toolbar_title_3">Item three</string>
+    <string name="menu_item_2">menu</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="bottom_menu_item_one">Item one</string>
+    <string name="bottom_menu_item_two">Item two</string>
+    <string name="bottom_menu_item_three">Item three</string>
+    <string name="menu_search">Search</string>
+    <string name="submenu_1">submenu_1</string>
+    <string name="submenu_2">submenu_2</string>
+    <string name="submenu_3">submenu_3</string>
+</resources>
