@@ -2,41 +2,38 @@ package com.example.lesson_7_strelyukhin.presentation.list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.lesson_7_strelyukhin.R
-import com.example.lesson_7_strelyukhin.data.model.AdapterElement
+import com.example.lesson_7_strelyukhin.data.model.Bridge
+import com.example.lesson_7_strelyukhin.databinding.ItemBridgeBinding
 
 class ViewHolder(
     parent: ViewGroup,
-    private val onItemClick: (AdapterElement) -> Unit,
+    private val onItemClick: (Bridge) -> Unit,
+    private val onBellClick: (Int) -> Unit,
 ) : RecyclerView.ViewHolder(
     LayoutInflater.from(parent.context).inflate(R.layout.item_bridge, parent, false)
 ) {
+    private val binding by viewBinding(ItemBridgeBinding::bind)
 
-    private val imageButtonBell by lazy { itemView.findViewById<ImageButton>(R.id.imageButtonBell) }
-    private val textViewBridgeName by lazy { itemView.findViewById<TextView>(R.id.textViewBridgeName) }
-    private val textViewBridgeTime by lazy { itemView.findViewById<TextView>(R.id.textViewBridgeTime) }
-    private val imageViewBridgeState by lazy { itemView.findViewById<ImageView>(R.id.imageViewBridgeState) }
-
-    fun bind(bridge: AdapterElement) {
+    fun bind(bridge: Bridge) {
         itemView.setOnClickListener {
             onItemClick(bridge)
         }
-        imageButtonBell.setImageResource(R.drawable.ic_bell_off)
-        imageButtonBell.setOnClickListener {
-            if (bridge.isBell) {
-                imageButtonBell.setImageResource(R.drawable.ic_bell_off)
-            } else {
-                imageButtonBell.setImageResource(R.drawable.ic_bell_on)
-            }
-            bridge.isBell = !bridge.isBell
+        if (bridge.isBell) {
+            binding.imageButtonBell.setImageResource(R.drawable.ic_bell_on)
+        } else {
+            binding.imageButtonBell.setImageResource(R.drawable.ic_bell_off)
         }
-        imageViewBridgeState.setImageResource(bridge.getImageId())
-        textViewBridgeName.text = bridge.name
-        textViewBridgeTime.text = buildString {
+
+        binding.imageButtonBell.setOnClickListener {
+            onBellClick(bridge.id!!)
+        }
+
+        binding.imageViewBridgeState.setImageResource(bridge.getImageId())
+        binding.textViewBridgeName.text = bridge.name
+        binding.textViewBridgeTime.text = buildString {
             bridge.divorces?.forEach { divorce ->
                 append("${divorce.start} - ${divorce.end}\t\t\t")
             }

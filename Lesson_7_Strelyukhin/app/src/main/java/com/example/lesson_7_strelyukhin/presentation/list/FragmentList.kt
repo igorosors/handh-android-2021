@@ -3,17 +3,16 @@ package com.example.lesson_7_strelyukhin.presentation.list
 import android.content.Context
 import android.os.Bundle
 import android.view.View
-import android.widget.TextView
-import android.widget.ViewFlipper
+import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.RecyclerView
+import androidx.fragment.app.viewModels
 import com.example.lesson_7_strelyukhin.R
-import com.example.lesson_7_strelyukhin.data.model.AdapterElement
-import com.example.lesson_7_strelyukhin.data.remote.BridgesApi
+import by.kirich1409.viewbindingdelegate.viewBinding
+import com.example.lesson_7_strelyukhin.data.LoadingState
+import com.example.lesson_7_strelyukhin.data.model.Bridge
+import com.example.lesson_7_strelyukhin.databinding.FragmentListBinding
 import com.example.lesson_7_strelyukhin.presentation.FragmentInformation
 import com.example.lesson_7_strelyukhin.presentation.FragmentListener
-import com.google.android.material.button.MaterialButton
 import java.lang.Exception
 
 class FragmentList : Fragment(R.layout.fragment_list) {
@@ -27,11 +26,10 @@ class FragmentList : Fragment(R.layout.fragment_list) {
         }
     }
 
+    private val viewModel: FragmentListViewModel by viewModels()
+    private val binding by viewBinding(FragmentListBinding::bind)
+
     private var fragmentListener: FragmentListener? = null
-    private val recyclerView by lazy { view?.findViewById<RecyclerView>(R.id.recyclerView) }
-    private val viewFlipper by lazy { view?.findViewById<ViewFlipper>(R.id.viewFlipper) }
-    private val textViewError by lazy { view?.findViewById<TextView>(R.id.textViewError) }
-    private val buttonRefresh by lazy { view?.findViewById<MaterialButton>(R.id.buttonRefresh) }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -45,53 +43,65 @@ class FragmentList : Fragment(R.layout.fragment_list) {
         super.onDetach()
     }
 
-    private fun loadBridges() {
-        lifecycleScope.launchWhenStarted {
-            try {
-                setStateLoading()
-                val bridges = BridgesApi.apiService.getBridges()
-                if (bridges.isEmpty()) {
-                    setStateEmpty()
-                } else {
-                    setStateData(bridges)
-                }
-            } catch (e: Exception) {
-                setStateError(e)
-            }
-        }
-    }
-
-    private fun setStateLoading() {
-        viewFlipper?.displayedChild = STATE_LOADING
-    }
-
-    private fun setStateData(bridges: List<AdapterElement>) {
-        viewFlipper?.displayedChild = STATE_DATA
-        val adapter = MainAdapter()
-        recyclerView?.adapter = adapter
-        adapter.setItems(bridges)
-        adapter.onItemClick = {
-            fragmentListener?.switchToFragment(FragmentInformation.newInstance(it))
-        }
-    }
-
-    private fun setStateEmpty() {
-        viewFlipper?.displayedChild = STATE_ERROR
-        textViewError?.text = "Не удалось получить данные, попробуйте ещё раз"
-    }
-
-    private fun setStateError(e: Exception) {
-        viewFlipper?.displayedChild = STATE_ERROR
-        textViewError?.text = e.message
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.loadBridges()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        loadBridges()
-        buttonRefresh?.setOnClickListener{
-            loadBridges()
+
+        binding.buttonRefresh.setOnClickListener {
+            viewModel.loadBridges()
         }
+        viewModel.bridgeListStateLiveData.observe(viewLifecycleOwner, { state ->
+            when (state) {
+                is LoadingState.Loading -> {
+                    setStateLoading()
+                }
+                is LoadingState.Data -> {
+                    if (state.data.isEmpty()) {
+                        setStateEmpty()
+                    } else {
+                        setStateData(state.data)
+                    }
+                }
+                is LoadingState.Error -> {
+                    setStateError(state.error)
+                }
+                else -> setStateLoading()
+            }
+
+        })
+    }
+
+    private fun setStateLoading() {
+        binding.viewFlipper.displayedChild = STATE_LOADING
+    }
+
+    private fun setStateData(bridges: List<Bridge>) {
+        binding.viewFlipper.displayedChild = STATE_DATA
+        val adapter = MainAdapter()
+        binding.recyclerView.adapter = adapter
+        adapter.setItems(bridges)
+        adapter.onItemClick = {
+            fragmentListener?.switchToFragment(FragmentInformation.newInstance(it))
+        }
+        adapter.onBellClick = {
+            viewModel.changeBellState(it)
+        }
+
+    }
+
+    private fun setStateEmpty() {
+        binding.viewFlipper.displayedChild = STATE_ERROR
+        binding.textViewError.text = "Не удалось получить данные, попробуйте ещё раз"
+    }
+
+    private fun setStateError(e: Exception) {
+        binding.viewFlipper.displayedChild = STATE_ERROR
+        binding.textViewError.text = e.message
     }
 
 }

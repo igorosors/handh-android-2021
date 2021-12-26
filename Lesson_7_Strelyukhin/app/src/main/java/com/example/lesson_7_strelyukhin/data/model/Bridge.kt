@@ -7,14 +7,14 @@ import kotlinx.parcelize.Parcelize
 import java.util.Calendar
 
 @Parcelize
-data class AdapterElement(
+data class Bridge(
+    @SerializedName("id") val id: Int?,
     @SerializedName("name") val name: String?,
     @SerializedName("description") val info: String?,
     @SerializedName("divorces") val divorces: List<Divorce>?,
     @SerializedName("photo_close_url") val photoCloseUrl: String?,
     @SerializedName("photo_open_url") val photoOpenUrl: String?,
-    var isBell: Boolean = false,
-
+    val isBell: Boolean = false,
     ) : Parcelable {
 
     fun getImageId(): Int {

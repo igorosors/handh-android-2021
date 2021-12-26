@@ -2,16 +2,16 @@ package com.example.lesson_7_strelyukhin.presentation.list
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.lesson_7_strelyukhin.data.model.AdapterElement
+import com.example.lesson_7_strelyukhin.data.model.Bridge
 
 class MainAdapter : RecyclerView.Adapter<ViewHolder>() {
 
-    lateinit var onItemClick: (AdapterElement) -> Unit
-
-    private val items = mutableListOf<AdapterElement>()
+    lateinit var onItemClick: (Bridge) -> Unit
+    lateinit var onBellClick: (Int) -> Unit
+    private val items = mutableListOf<Bridge>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(parent, onItemClick)
+        return ViewHolder(parent, onItemClick, onBellClick)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -22,7 +22,7 @@ class MainAdapter : RecyclerView.Adapter<ViewHolder>() {
         return items.size
     }
 
-    fun setItems(items: List<AdapterElement>) {
+    fun setItems(items: List<Bridge>) {
         this.items.apply {
             clear()
             addAll(items)

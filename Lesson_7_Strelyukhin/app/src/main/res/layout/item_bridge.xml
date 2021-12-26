@@ -23,6 +23,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:fontFamily="@font/roboto"
+        android:textColor="@color/black"
+        android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@+id/imageViewBridgeState"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Александра Невского" />
@@ -32,6 +35,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:fontFamily="@font/roboto"
+        android:textColor="@color/gray"
+        android:textSize="14sp"
         app:layout_constraintStart_toEndOf="@+id/imageViewBridgeState"
         app:layout_constraintTop_toBottomOf="@+id/textViewBridgeName"
         tools:text="2:20 — 5:10" />

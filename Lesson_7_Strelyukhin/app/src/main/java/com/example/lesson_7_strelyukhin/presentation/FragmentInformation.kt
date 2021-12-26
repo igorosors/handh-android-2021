@@ -1,28 +1,28 @@
 package com.example.lesson_7_strelyukhin.presentation
 
+import androidx.appcompat.app.AlertDialog
 import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
+import android.view.ContextThemeWrapper
 import android.view.View
-import android.widget.FrameLayout
-import android.widget.ImageView
+import android.widget.NumberPicker
 import android.widget.TextView
-import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.example.lesson_7_strelyukhin.R
-import com.example.lesson_7_strelyukhin.data.model.AdapterElement
+import com.example.lesson_7_strelyukhin.data.model.Bridge
+import com.example.lesson_7_strelyukhin.databinding.FragmentInformationBinding
 import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.appbar.CollapsingToolbarLayout
 
 
 class FragmentInformation : Fragment(R.layout.fragment_information) {
     companion object {
         const val EXTRA_BRIDGE = "extra_bridge"
-        var FRAGMENT_STATE = false
 
-        fun newInstance(bridge: AdapterElement): FragmentInformation {
+        fun newInstance(bridge: Bridge): FragmentInformation {
             return FragmentInformation().apply {
                 arguments = bundleOf(
                     EXTRA_BRIDGE to bridge
@@ -45,17 +45,18 @@ class FragmentInformation : Fragment(R.layout.fragment_information) {
         super.onDetach()
     }
 
+    private val binding by viewBinding(FragmentInformationBinding::bind)
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        FRAGMENT_STATE = true
 
-        val appBarLayout = view.findViewById<AppBarLayout>(R.id.appBarLayout)
-        val toolbar = view.findViewById<Toolbar>(R.id.toolbar)
-        val bridge = arguments?.getParcelable<AdapterElement>(EXTRA_BRIDGE)
-        val imageViewToolbarBackground = view.findViewById<ImageView>(R.id.imageViewToolbarBackground)
-        val toolbarLayout = view.findViewById<CollapsingToolbarLayout>(R.id.toolbarLayout)
+        val bridge = arguments?.getParcelable<Bridge>(EXTRA_BRIDGE)
 
-        appBarLayout.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
+        binding.buttonNotification.setOnClickListener {
+            showAlert("${bridge?.name.toString()} мост")
+        }
+
+        binding.appBarLayout.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
             var scrollRange = -1
             var isShow = true
             override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
@@ -63,53 +64,70 @@ class FragmentInformation : Fragment(R.layout.fragment_information) {
                     scrollRange = appBarLayout.totalScrollRange
                 }
                 if (scrollRange + verticalOffset == 0) {
-                    toolbarLayout.title = bridge?.name
+                    binding.toolbarLayout.title = bridge?.name
                     isShow = true
                 } else if (isShow) {
-                    toolbarLayout.title = " "
+                    binding.toolbarLayout.title = " "
                     isShow = false
                 }
             }
 
         })
 
-        val buttonNotification = view.findViewById<FrameLayout>(R.id.buttonNotification)
-        val imageViewBridgeState = view.findViewById<ImageView>(R.id.imageViewBridgeState)
-        val textViewBridgeName = view.findViewById<TextView>(R.id.textViewBridgeName)
-        val textViewBridgeTime = view.findViewById<TextView>(R.id.textViewBridgeTime)
-        val textViewBridgeInfo = view.findViewById<TextView>(R.id.textViewBridgeInfo)
-
-        buttonNotification.setOnClickListener {
-
-        }
-
-        bridge?.getImageId()?.let { imageViewBridgeState.setImageResource(it) }
-        textViewBridgeName.text = bridge?.name
+        bridge?.getImageId()?.let { binding.imageViewBridgeState.setImageResource(it) }
+        binding.textViewBridgeName.text = bridge?.name
         if (bridge != null) {
-            textViewBridgeTime.text = buildString {
+            binding.textViewBridgeTime.text = buildString {
                 bridge.divorces?.forEach { divorce ->
                     append("${divorce.start} — ${divorce.end}\t\t\t")
                 }
             }
         }
 
-        textViewBridgeInfo.text = buildString {
-            for (i in 1..8) append("${bridge?.info}\n\n")
-        }
+        binding.textViewBridgeInfo.text = bridge?.info
 
-        imageViewToolbarBackground.setImageResource(R.drawable.ic_launcher_background)
+        binding.imageViewToolbarBackground.setImageResource(R.drawable.ic_launcher_background)
 
-        toolbar?.setNavigationOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             fragmentListener?.back("key_information")
         }
         Glide.with(this)
             .asBitmap()
             .load(if (bridge?.getImageId() == R.drawable.ic_bridge_late) bridge.photoCloseUrl else bridge?.photoOpenUrl)
-            .into(imageViewToolbarBackground)
+            .into(binding.imageViewToolbarBackground)
     }
 
-    override fun onDestroyView() {
-        FRAGMENT_STATE = false
-        super.onDestroyView()
+    private fun showAlert(title: String) {
+        val inflateView = layoutInflater.inflate(R.layout.number_picker, null)
+        val numbers = arrayOf("15 мин", "30 мин", "45 мин", "60 мин")
+        val numberPicker = inflateView.findViewById<NumberPicker>(R.id.numberPicker).apply {
+            minValue = 0
+            maxValue = numbers.size - 1
+            displayedValues = numbers
+            wrapSelectorWheel = false
+        }
+
+        numberPicker.setOnValueChangedListener { _, _, newVal ->
+            Log.d("lll", newVal.toString())
+        }
+        val alertDialog =
+            AlertDialog.Builder(object : ContextThemeWrapper(requireContext(), R.style.AlertDialogTheme) {})
+                .apply {
+                    val customTitle = layoutInflater.inflate(R.layout.custom_title, null)
+                    (customTitle as TextView).text = title
+                    setCustomTitle(customTitle)
+                    setView(inflateView)
+                    setMessage("За сколько до закрытия моста вас предупредить?")
+                    setNegativeButton("ОТМЕНИТЬ") { _, _ -> }
+                    setPositiveButton("ОК") { _, _ ->
+                        createNotification()
+                    }
+                    create()
+                }
+        alertDialog.show()
+    }
+
+    private fun createNotification() {
+
     }
 }
